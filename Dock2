@@ -1,0 +1,69 @@
+##Создать директорию для проекта и перейти в нее.
+##Создать файл index.html с содержимым.
+##Создать файл Dockerfile с содержимым.
+##Собрать image.
+##Запустить контейнер.
+##Перейти в браузере по адресу http://localhost:8080 и увидеть сообщение из вашего index.html.\
+#
+#FROM nginx:latest
+#
+#LABEL email="email@gmail.com"
+#LABEL version="1.0"
+#LABEL description="description"
+#
+#
+#WORKDIR /usr/share/nginx/html
+#
+#COPY index.html .
+#
+#EXPOSE 80
+#
+#ENTRYPOINT ["nginx"]
+#
+#CMD ["-g", "daemon off;"]
+
+
+FROM python:3.11-slim
+
+ENV PYTHONDONTWRITEBYTECODE=1\
+    PYTHONUNBUFFERED=1
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    gcc \
+    libxml2-dev\
+    libslti-dev\
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+
+RUN pip install -r --no-cache-dir requirements.txt
+
+COPY . .
+
+CMD ["python", "app.py"]
+
+
+# ========================================================================================================
+# КОМАНДЫ С УРОКА
+
+# docker run -p 3306:3306 --name mysqlDB -e MYSQL_ROOT_PASSWORD=my-secret-pw -v /opt/mysql-data:/var/lib/mysql -d mysql:latest
+
+# mysql -h localhost -U myuser -p
+# =======================================================================================================
+
+#FROM mysql:8.0
+#
+#ENV MYSQL_ROOT_PASSWORD=rootpass \
+#    MYSQL_DATABASE=myapp \
+#    MYSQL_USER=myuser \
+#    MYSQL_PASSWORD=mypassword
+#
+## 2. Копируем SQL-дамп в специальную директорию
+## Всё, что окажется в /docker-entrypoint-initdb.d будет выполнено при первом запуске
+#COPY init.sql /docker-entrypoint-initdb.d/
+#
+## 3. Документируем порт и том
+#EXPOSE 3306
+#VOLUME /var/lib/mysql

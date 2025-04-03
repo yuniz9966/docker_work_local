@@ -1,0 +1,28 @@
+version: "3.8"
+
+services:
+  my_first_service:
+    container_name: "my_nginx_container"
+    image: nginx:latest
+    ports:
+      - "8080:80"
+    volumes:
+      - ./html:/usr/share/nginx/html
+    networks:
+      - common_network
+
+  database:
+    container_name: "my_db"
+    image: mysql:5.7
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword123
+    volumes:
+      - db_vol:/var/lib/mysql
+    networks:
+      - common_network
+
+volumes:
+  db_vol:
+
+networks:
+  common_network:

@@ -1,0 +1,5 @@
+https://example.com
+https://httpbin.org/html
+http://neverssl.com
+https://www.w3.org/TR/PNG/iso_8859-1.txt
+https://en.wikipedia.org/wiki/HTTP_404
